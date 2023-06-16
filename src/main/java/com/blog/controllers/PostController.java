@@ -49,7 +49,7 @@ public class PostController {
 		return ResponseEntity.ok(postById);
 	}
 
-	@GetMapping(path = "/posts/")
+	@GetMapping(path = "/posts")
 	public ResponseEntity<List<PostDto>> getAllPosts() {
 		List<PostDto> allPosts = this.postService.getAllPosts();
 		return ResponseEntity.ok(allPosts);
