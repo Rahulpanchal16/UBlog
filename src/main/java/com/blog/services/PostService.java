@@ -20,7 +20,7 @@ public interface PostService {
 	PostDto getPostById(int postId);
 
 	// get all
-	PostResponse getAllPosts(int pageNumber,int pageSize);
+	PostResponse getAllPosts(int pageNumber, int pageSize,String sortBy,String sortDir);
 
 	// get posts by category
 	List<PostDto> getPostsByCategory(int catId);
