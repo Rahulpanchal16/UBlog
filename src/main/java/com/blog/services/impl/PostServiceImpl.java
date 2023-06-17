@@ -1,5 +1,6 @@
 package com.blog.services.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -142,8 +143,15 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<PostDto> searchPosts(String keyword) {
-
-		return null;
+		List<Post> findByTitleContaining = this.postRepo.findByTitleContaining(keyword);
+		List<PostDto> dtoList = findByTitleContaining.stream().map((x) -> this.modelMapper.map(x, PostDto.class))
+				.collect(Collectors.toList());
+//		List<PostDto> dtoList = new ArrayList<>();
+//		for (Post x : findByTitleContaining) {
+//			PostDto dto = this.modelMapper.map(x, PostDto.class);
+//			dtoList.add(dto);
+//		}
+		return dtoList;
 	}
 
 //	@Override

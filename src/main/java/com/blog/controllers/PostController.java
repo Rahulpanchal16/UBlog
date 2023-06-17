@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog.configs.AppConstants;
 import com.blog.payload.ApiResponse;
 import com.blog.payload.PostDto;
 import com.blog.payload.PostResponse;
@@ -54,10 +55,10 @@ public class PostController {
 
 	@GetMapping(path = "/posts")
 	public ResponseEntity<PostResponse> getAllPosts(
-			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
-			@RequestParam(value = "pageSize", defaultValue = "5", required = false) int pageSize,
-			@RequestParam(value = "sortBy", defaultValue = "title", required = false) String sortBy,
-			@RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
+			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
+			@RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+			@RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
 		PostResponse allPosts = this.postService.getAllPosts(pageNumber, pageSize, sortBy, sortDir);
 		return ResponseEntity.ok(allPosts);
 	}
@@ -73,6 +74,14 @@ public class PostController {
 	public ResponseEntity<PostDto> updateDto(@RequestBody PostDto postDto, @PathVariable int postId) {
 		PostDto updatePost = this.postService.updatePost(postDto, postId);
 		return ResponseEntity.ok(updatePost);
+	}
+
+	@GetMapping(path = "/posts/search/{keyword}")
+	public ResponseEntity<List<PostDto>> search(@PathVariable String keyword) {
+
+		List<PostDto> searchPosts = this.postService.searchPosts(keyword);
+
+		return ResponseEntity.ok(searchPosts);
 	}
 
 //	@PostMapping(path = "/user/{userId}/category/{catId}/ten-posts")
