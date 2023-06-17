@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog.payload.ApiResponse;
 import com.blog.payload.PostDto;
 import com.blog.services.PostService;
 
@@ -56,9 +57,10 @@ public class PostController {
 	}
 
 	@DeleteMapping(path = "/posts/{postId}")
-	public ResponseEntity<String> deletePost(@PathVariable int postId) {
+	public ResponseEntity<ApiResponse> deletePost(@PathVariable int postId) {
 		this.postService.deletePost(postId);
-		return new ResponseEntity<String>("Deleted Successfully", HttpStatus.OK);
+		ApiResponse apiResponse = new ApiResponse("Post is deleted successfully", true);
+		return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
 	}
 
 	@PutMapping(path = "/posts/{postId}")
@@ -66,5 +68,12 @@ public class PostController {
 		PostDto updatePost = this.postService.updatePost(postDto, postId);
 		return ResponseEntity.ok(updatePost);
 	}
+
+//	@PostMapping(path = "/user/{userId}/category/{catId}/ten-posts")
+//	public ResponseEntity<PostDto> createTenPost(@RequestBody PostDto postDto, @PathVariable int userId,
+//			@PathVariable int catId) {
+//		PostDto createPost = postService.createTenPosts(postDto, userId, catId);
+//		return ResponseEntity.status(HttpStatus.CREATED).body(createPost);
+//	}
 
 }

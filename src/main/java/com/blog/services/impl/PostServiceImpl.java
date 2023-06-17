@@ -33,6 +33,8 @@ public class PostServiceImpl implements PostService {
 	@Autowired
 	private CategoryRepo categoryRepo;
 
+//	private PostDto updatedPostDto;
+
 	@Override
 	public PostDto createPost(PostDto postDto, int userId, int catId) {
 
@@ -53,13 +55,15 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostDto updatePost(PostDto postDto, int postId) {
 
-		Post post = this.modelMapper.map(postDto, Post.class);
 		Post postById = this.postRepo.findById(postId)
 				.orElseThrow(() -> new ResourceNotFoundException("Post", "Id", postId));
-		postById.setCategory(post.getCategory());
-		postById.setContent(post.getContent());
+		postById.setImageName(postDto.getImageName());
+		postById.setContent(postDto.getContent());
+		postById.setTitle(postDto.getTitle());
 
-		return null;
+		Post updatedPost = this.postRepo.save(postById);
+		PostDto dto = this.modelMapper.map(updatedPost, PostDto.class);
+		return dto;
 	}
 
 	@Override
@@ -117,5 +121,29 @@ public class PostServiceImpl implements PostService {
 
 		return null;
 	}
+
+//	@Override
+//	public PostDto createTenPosts(PostDto postDto, int userId, int catId) {
+//
+//		User user = this.userRepo.findById(userId)
+//				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+//		Category category = this.categoryRepo.findById(catId)
+//				.orElseThrow(() -> new ResourceNotFoundException("Category", "id", catId));
+//
+//		for (int i = 1; i <= 10; i++) {
+//			Post post = this.modelMapper.map(postDto, Post.class);
+//			post.setCategory(category);
+//			post.setUser(user);
+//			post.setTitle("Title: " + i);
+//			post.setContent("Content: " + i);
+//			post.setImageName("default.png");
+//			post.setAddedDate(new Date());
+//			Post savedPost = this.postRepo.save(post);
+//			updatedPostDto = this.modelMapper.map(savedPost, PostDto.class);
+//
+//		}
+//
+//		return updatedPostDto;
+//	}
 
 }

@@ -2,7 +2,6 @@ package com.blog.services;
 
 import java.util.List;
 
-import com.blog.entities.Post;
 import com.blog.payload.PostDto;
 
 public interface PostService {
@@ -30,5 +29,8 @@ public interface PostService {
 
 	// search posts
 	List<PostDto> searchPosts(String keyword);
+
+	// creating 10 test posts
+//	PostDto createTenPosts(PostDto postDto,int userId,int catId);
 
 }
