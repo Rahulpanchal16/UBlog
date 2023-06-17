@@ -1,7 +1,5 @@
 package com.blog.controllers;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blog.configs.AppConstants;
 import com.blog.payload.ApiResponse;
 import com.blog.payload.CategoryDto;
+import com.blog.payload.CategoryResponse;
 import com.blog.services.CategoryService;
 
 import jakarta.validation.Valid;
@@ -53,8 +54,12 @@ public class CategoryController {
 	}
 
 	@GetMapping(path = "/")
-	public ResponseEntity<List<CategoryDto>> getAllCategories() {
-		List<CategoryDto> allCategories = this.categoryService.getAllCategories();
+	public ResponseEntity<CategoryResponse> getAllCategories(
+			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) int pageNumber,
+			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
+			@RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+			@RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
+		CategoryResponse allCategories = this.categoryService.getAllCategories(pageNumber, pageSize, sortBy, sortDir);
 		return ResponseEntity.ok(allCategories);
 	}
 
