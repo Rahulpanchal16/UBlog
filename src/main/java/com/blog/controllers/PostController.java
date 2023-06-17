@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blog.payload.ApiResponse;
@@ -51,8 +52,9 @@ public class PostController {
 	}
 
 	@GetMapping(path = "/posts")
-	public ResponseEntity<List<PostDto>> getAllPosts() {
-		List<PostDto> allPosts = this.postService.getAllPosts();
+	public ResponseEntity<List<PostDto>> getAllPosts(
+			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber) {
+		List<PostDto> allPosts = this.postService.getAllPosts(pageNumber);
 		return ResponseEntity.ok(allPosts);
 	}
 
