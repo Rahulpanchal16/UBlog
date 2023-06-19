@@ -28,6 +28,7 @@ public class PostController {
 	@Autowired
 	private PostService postService;
 
+	
 	@PostMapping(path = "/user/{userId}/category/{catId}/posts")
 	public ResponseEntity<PostDto> createPost(@RequestBody PostDto postDto, @PathVariable int userId,
 			@PathVariable int catId) {
@@ -83,6 +84,7 @@ public class PostController {
 
 		return ResponseEntity.ok(searchPosts);
 	}
+
 
 //	@PostMapping(path = "/user/{userId}/category/{catId}/ten-posts")
 //	public ResponseEntity<PostDto> createTenPost(@RequestBody PostDto postDto, @PathVariable int userId,
