@@ -1,12 +1,15 @@
 package com.blog.controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +27,8 @@ import com.blog.payload.PostDto;
 import com.blog.payload.PostResponse;
 import com.blog.services.FileService;
 import com.blog.services.PostService;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(path = "/api/")
@@ -106,6 +111,14 @@ public class PostController {
 
 		return ResponseEntity.ok(updatedPost);
 
+	}
+
+	@GetMapping(path = "/post/image/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+	public void getPostImage(@PathVariable String imageName, HttpServletResponse response) throws IOException {
+
+		InputStream inputStream = this.fileService.getResource(path, imageName);
+		response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+		StreamUtils.copy(inputStream, response.getOutputStream());
 	}
 
 //	@PostMapping(path = "/user/{userId}/category/{catId}/ten-posts")
