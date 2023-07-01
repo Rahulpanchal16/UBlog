@@ -1,5 +1,7 @@
 package com.blog.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.blog.configs.AppConstants;
 import com.blog.payload.ApiResponse;
 import com.blog.payload.UserDto;
-import com.blog.payload.UserResponse;
 import com.blog.services.UserService;
 
 import jakarta.validation.Valid;
@@ -56,14 +55,19 @@ public class UserController {
 		return new ResponseEntity<>(userById, HttpStatus.OK);
 	}
 
-	// Get All Users
+//	// Get All Users
+//	@GetMapping(path = "/all")
+//	public ResponseEntity<UserResponse> getAllUsers(
+//			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
+//			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) int pageNumber,
+//			@RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+//			@RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
+//		UserResponse allUsers = this.userService.getAllUsers(pageSize, pageNumber, sortBy, sortDir);
+//		return ResponseEntity.ok(allUsers);
+//	}
 	@GetMapping(path = "/")
-	public ResponseEntity<UserResponse> getAllUsers(
-			@RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
-			@RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) int pageNumber,
-			@RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
-			@RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
-		UserResponse allUsers = this.userService.getAllUsers(pageSize, pageNumber, sortBy, sortDir);
+	public ResponseEntity<List<UserDto>> getAllUsers() {
+		List<UserDto> allUsers = this.userService.getAllUsers();
 		return ResponseEntity.ok(allUsers);
 	}
 

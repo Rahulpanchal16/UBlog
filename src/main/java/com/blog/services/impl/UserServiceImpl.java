@@ -1,20 +1,14 @@
 package com.blog.services.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.blog.entities.User;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.payload.UserDto;
-import com.blog.payload.UserResponse;
 import com.blog.repositories.UserRepo;
 import com.blog.services.UserService;
 
@@ -55,24 +49,29 @@ public class UserServiceImpl implements UserService {
 		return this.userToDto(user);
 	}
 
-	@Override
-	public UserResponse getAllUsers(int pageSize, int pageNumber, String sortBy, String sortDir) {
-
-		Sort sort = (sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending());
-		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-
-		Page<User> pageUser = this.userRepo.findAll(pageable);
-		List<User> content = pageUser.getContent();
-		List<UserDto> list = content.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
-		UserResponse userResponse = new UserResponse();
-		userResponse.setContent(list);
-		userResponse.setPageSize(pageUser.getSize());
-		userResponse.setPageNumber(pageUser.getNumber());
-		userResponse.setTotalElements(pageUser.getTotalElements());
-		userResponse.setTotalPages(pageUser.getTotalPages());
-		userResponse.setLastPage(pageUser.isLast());
-
-		return userResponse;
+//	@Override
+//	public UserResponse getAllUsers(int pageSize, int pageNumber, String sortBy, String sortDir) {
+//
+//		Sort sort = (sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending());
+//		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+//
+//		Page<User> pageUser = this.userRepo.findAll(pageable);
+//		List<User> content = pageUser.getContent();
+//		List<UserDto> list = content.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
+//		UserResponse userResponse = new UserResponse();
+//		userResponse.setContent(list);
+//		userResponse.setPageSize(pageUser.getSize());
+//		userResponse.setPageNumber(pageUser.getNumber());
+//		userResponse.setTotalElements(pageUser.getTotalElements());
+//		userResponse.setTotalPages(pageUser.getTotalPages());
+//		userResponse.setLastPage(pageUser.isLast());
+//
+//		return userResponse;
+//	}
+	public List<UserDto> getAllUsers() {
+		List<User> findAll = this.userRepo.findAll();
+		List<UserDto> list = findAll.stream().map(x->this.modelMapper.map(x, UserDto.class)).toList();
+		return list;
 	}
 
 	@Override
