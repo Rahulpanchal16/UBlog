@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,6 +43,7 @@ public class UserController {
 	}
 
 	// Delete user
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(path = "/{userId}")
 	public ResponseEntity<?> deleteUser(@PathVariable int userId) {
 		this.userService.deleteUser(userId);
@@ -65,7 +67,7 @@ public class UserController {
 //		UserResponse allUsers = this.userService.getAllUsers(pageSize, pageNumber, sortBy, sortDir);
 //		return ResponseEntity.ok(allUsers);
 //	}
-	@GetMapping(path = "/")
+	@GetMapping(path = "/all")
 	public ResponseEntity<List<UserDto>> getAllUsers() {
 		List<UserDto> allUsers = this.userService.getAllUsers();
 		return ResponseEntity.ok(allUsers);

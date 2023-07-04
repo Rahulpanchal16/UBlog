@@ -4,11 +4,15 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.blog.configs.AppConstants;
+import com.blog.entities.Role;
 import com.blog.entities.User;
 import com.blog.exceptions.ResourceNotFoundException;
 import com.blog.payload.UserDto;
+import com.blog.repositories.RoleRepo;
 import com.blog.repositories.UserRepo;
 import com.blog.services.UserService;
 
@@ -21,10 +25,17 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private PasswordEncoder encoder;
+
+	@Autowired
+	private RoleRepo roleRepo;
+
 	@Override
 	public UserDto createUser(UserDto userDto) {
 
 		User dtoToUser = this.dtoToUser(userDto);
+		// dtoToUser.setPassword(encoder.encode(userDto.getPassword()));
 		User savedUser = this.userRepo.save(dtoToUser);
 		return this.userToDto(savedUser);
 	}
@@ -70,7 +81,7 @@ public class UserServiceImpl implements UserService {
 //	}
 	public List<UserDto> getAllUsers() {
 		List<User> findAll = this.userRepo.findAll();
-		List<UserDto> list = findAll.stream().map(x->this.modelMapper.map(x, UserDto.class)).toList();
+		List<UserDto> list = findAll.stream().map(x -> this.modelMapper.map(x, UserDto.class)).toList();
 		return list;
 	}
 
@@ -100,6 +111,20 @@ public class UserServiceImpl implements UserService {
 		 * userDto.setAbout(user.getAbout());
 		 */
 		return userDto;
+	}
+
+	@Override
+	public UserDto registerNewUser(UserDto userDto) {
+		User user = this.modelMapper.map(userDto, User.class);
+		// encoding the password
+		user.setPassword(encoder.encode(user.getPassword()));
+		// roles
+		Role role = this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+		user.getRoles().add(role);
+		User newUser = this.userRepo.save(user);
+		UserDto newUserDto = this.modelMapper.map(newUser, UserDto.class);
+
+		return newUserDto;
 	}
 
 }

@@ -1,5 +1,8 @@
 package com.blog.payload;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -27,5 +30,8 @@ public class UserDto {
 	@Size(min = 5, max = 20, message = "Password should be minimum 5 and maximum 20 characters long")
 	private String password;
 	private String about;
+	
+	private Set<RoleDto> roles = new HashSet<>();
+
 
 }
