@@ -99,7 +99,7 @@ public class PostController {
 		return ResponseEntity.ok(searchPosts);
 	}
 
-	@PostMapping(path = "/post/image/upload/{postId}")
+	@PostMapping(path = "/posts/image/upload/{postId}")
 	public ResponseEntity<PostDto> uploadPostImage(@RequestParam("image") MultipartFile file,
 			@PathVariable Integer postId) throws IOException {
 

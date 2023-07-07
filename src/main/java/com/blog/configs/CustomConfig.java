@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.blog.security.CustomUserDetailsService;
 import com.blog.security.JwtAuthenticationEntryPoint;
@@ -21,8 +22,20 @@ import com.blog.security.JwtAuthenticationFilter;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@EnableWebMvc
 public class CustomConfig {
 
+	public static final String[] PUBLIC_URLS= {
+			"/api/auth/**",
+			"/v3/api-docs/**",
+			"/v2/api-docs/**",
+			"/swagger-resources/**",
+			"/swagger-ui/**",
+			"/webjars/**",
+			"/swagger.json",
+			"/swagger-ui.html",
+	};
+	
 	@Autowired
 	private JwtAuthenticationEntryPoint authenticationEntryPoint;
 	@Autowired
@@ -34,12 +47,11 @@ public class CustomConfig {
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
 		security.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/api/auth/**").permitAll().anyRequest().authenticated())
+				.authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_URLS).permitAll()
+						.anyRequest().authenticated())
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(this.authenticationEntryPoint))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(this.authenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
 		return security.build();
 	}
 

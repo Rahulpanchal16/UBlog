@@ -20,7 +20,7 @@ import com.blog.security.JwtTokenHelper;
 import com.blog.services.UserService;
 
 @RestController
-@RequestMapping(path = "/api/auth")
+@RequestMapping(path = "/api/")
 public class AuthController {
 
 	@Autowired
@@ -35,7 +35,7 @@ public class AuthController {
 	@Autowired
 	private UserService userService;
 
-	@PostMapping(path = "/login")
+	@PostMapping(path = "/auth/login")
 	public ResponseEntity<JwtAuthResponse> createToken(@RequestBody JwtAuthRequest authRequest) throws Exception {
 		this.authenticate(authRequest.getUsername(), authRequest.getPassword());
 		UserDetails userDetails = this.detailsService.loadUserByUsername(authRequest.getUsername());
@@ -58,7 +58,7 @@ public class AuthController {
 	}
 
 	// registering a new user
-	@PostMapping(path = "/register-new-user")
+	@PostMapping(path = "/auth/register_new_user")
 	public ResponseEntity<UserDto> registerNewUser(@RequestBody UserDto userDto) {
 		UserDto registeredNewUser = this.userService.registerNewUser(userDto);
 		return new ResponseEntity<UserDto>(registeredNewUser, HttpStatus.CREATED);
